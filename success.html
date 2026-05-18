@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>KNITLY — Commande confirmée</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px 20px;}
+.wrap{max-width:480px;}
+.icon{width:80px;height:80px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;}
+h1{font-family:'Anton';font-size:clamp(40px,8vw,68px);text-transform:uppercase;margin:0 0 12px;}
+.ref{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.22em;background:var(--ink);color:var(--paper);padding:8px 18px;display:inline-block;margin:12px 0 20px;}
+p{color:#666;font-size:15px;line-height:1.65;margin:0 0 28px;}
+a{display:inline-block;background:var(--ink);color:var(--paper);padding:14px 28px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="icon">✓</div>
+  <h1>Commande<br>confirmée !</h1>
+  <div class="ref" id="ref">KNT-000000</div>
+  <p>Merci pour ta commande Knitly.<br>Tu recevras un email de confirmation sous peu.<br><br><strong>Livraison estimée : 2 à 5 jours ouvrés.</strong></p>
+  <a href="Knitly Site.html">← Retour à la boutique</a>
+</div>
+<script>
+document.getElementById('ref').textContent = 'KNT-' + Math.floor(100000 + Math.random()*900000);
+</script>
+</body>
+</html>

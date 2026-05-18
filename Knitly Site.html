@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>KNITLY — L'accessoire qui porte votre style</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Knitly réinvente la façon de porter votre téléphone. Maille 3D tridimensionnelle, 8 coloris, 2 formats — pensé pour être vu. Paris, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300..700;1,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<!-- ============ ADD-TO-CART TOAST ============ -->
+<div class="toast" id="toast">✓ Ajouté au panier</div>
+
+<!-- ============ NEWSLETTER POPUP ============ -->
+<div class="nl-overlay" id="nl-ov" hidden>
+  <div class="nl-box">
+    <button class="nl-close" onclick="closeNL()">✕</button>
+    <p class="eyebrow" style="color:var(--orange);">OFFRE EXCLUSIVE — PREMIÈRE COMMANDE</p>
+    <h2 class="nl-title">−5€ SUR<br>VOTRE COMMANDE</h2>
+    <p class="nl-sub">Inscrivez-vous et recevez votre code promo pour 5€ de réduction sur votre première commande Knitly.</p>
+    <form class="nl-form" onsubmit="event.preventDefault();revealPromo();">
+      <input type="email" id="nl-email" placeholder="VOTRE@EMAIL.COM" required>
+      <button type="submit">OBTENIR</button>
+    </form>
+    <div class="nl-promo" id="nl-promo" hidden>
+      <p class="nl-promo-label mono">VOTRE CODE PROMO</p>
+      <p class="nl-promo-code">KNITLY5</p>
+      <p class="nl-promo-hint mono">À UTILISER AU CHECKOUT</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav" data-screen-label="Nav">
+  <div class="container nav-inner">
+    <a class="logo" href="#"><span class="dot"></span>KNIT<span class="ly">LY</span></a>
+    <div class="nav-links">
+      <a href="#products">COLLECTION</a>
+      <a href="#produit">LE PRODUIT</a>
+      <a href="#avis">AVIS</a>
+      <a href="#apropos">À PROPOS</a>
+      <a href="account.html">MON COMPTE</a>
+    </div>
+    <button class="nav-cart" onclick="openCart()">
+      <span>🛒</span>
+      <span>PANIER</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" data-screen-label="Hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">DESIGN MAILLE 3D — PARIS 2026</p>
+        <h1 class="display">YOUR<br>PHONE.<br><span class="ghost">YOUR</span><br>STYLE.</h1>
+        <p class="lede">Knitly réinvente la façon de porter votre téléphone. Maille 3D tridimensionnelle, 8 coloris, deux formats — pensé pour être vu.</p>
+        <div class="ctas">
+          <button class="btn btn-primary" onclick="scrollTo2('products')">VOIR LA COLLECTION</button>
+          <button class="btn btn-ghost" onclick="scrollTo2('produit')">EN SAVOIR PLUS</button>
+        </div>
+      </div>
+      <div class="hero-img">
+        <img src="assets/hero-knot.jpg" alt="Knitly bandoulière tricotée" loading="eager">
+        <div class="hero-dots"><span></span><span></span><span></span><span></span><span class="active"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker" data-screen-label="Ticker">
+  <div class="container ticker-inner">
+    <span>· 5★ AVIS CLIENTS ·</span>
+    <span>🔥 STOCK LIMITÉ</span>
+    <span>LIVRAISON FRANCE 48H</span>
+    <span>CODE : KNITLY5</span>
+  </div>
+</div>
+
+<!-- ============ LIFESTYLE 01 — PORTÉ PAS RANGÉ ============ -->
+<section class="sec sec-cream" id="produit" data-screen-label="Lifestyle 1">
+  <div class="container">
+    <div class="ls">
+      <div class="ls-img">
+        <span class="badge">01 / VOTRE TEL</span>
+        <img src="assets/closeup-orange-detail.jpg" alt="Knitly close-up maille">
+      </div>
+      <div class="ls-copy">
+        <p class="eyebrow">LE PRODUIT</p>
+        <h2 class="display">Porté,<br>pas juste<br><em>rangé.</em></h2>
+        <p class="body">Knitly a été pensé pour éviter les rayures, les chocs du quotidien et le désordre dans les sacs, tout en gardant une esthétique minimaliste et tendance. Sa maille extensible double couche épouse parfaitement le téléphone sans ajouter de volume inutile.</p>
+        <p class="body">La matière douce nettoie naturellement les traces sur l'écran. Léger, confortable, pensé pour être exposé — pas pour disparaître dans une poche.</p>
+        <button class="btn btn-dark" onclick="scrollTo2('products')">VOIR LA COLLECTION</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSE-UPS ROW ============ -->
+<section class="cu-row sec-paper2" data-screen-label="Close-ups">
+  <div class="container">
+    <div class="cu-grid">
+      <div class="cu-item"><img src="assets/closeup-cinnamon.jpg" alt="Knitly Cognac — détail maille 3D"><div class="cu-cap mono">MAILLE 3D · DÉTAIL</div></div>
+      <div class="cu-item"><img src="assets/trio-bands.jpg" alt="Trois Knitly — Ember, Aura, Glacial"><div class="cu-cap mono">TROIS COLORIS PHARES</div></div>
+      <div class="cu-item"><img src="assets/closeup-sapphire.jpg" alt="Knitly Klein — iPhone Air"><div class="cu-cap mono">MATIÈRE · PRÉCISION</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIFESTYLE 02 — DEUX FORMATS ============ -->
+<section class="sec sec-cream" data-screen-label="Lifestyle 2">
+  <div class="container">
+    <div class="ls ls-reverse">
+      <div class="ls-img">
+        <span class="badge">02 / DEUX TAILLES</span>
+        <img src="assets/products/cognac-court-2.webp" alt="Knitly Cognac porté en bandoulière">
+      </div>
+      <div class="ls-copy">
+        <p class="eyebrow">DEUX FORMATS</p>
+        <h2 class="display">Deux formats.<br><em>Un univers.</em></h2>
+        <div class="format-row">
+          <div class="format">
+            <div class="format-size">40 cm</div>
+            <div class="format-name">KNITLY COURT</div>
+            <p class="format-desc">Compact et lifestyle, porté à la main ou accroché à un sac. Parfait pour toutes les tenues.</p>
+            <div class="format-price">19,90 €</div>
+          </div>
+          <div class="format">
+            <div class="format-size">80 cm</div>
+            <div class="format-name">KNITLY GRAND</div>
+            <p class="format-desc">Idéal en bandoulière sur l'épaule. Peut accueillir AirPods, clés ou petits essentiels du quotidien.</p>
+            <div class="format-price">27,90 €</div>
+          </div>
+        </div>
+        <button class="btn btn-dark" onclick="scrollTo2('products')">CHOISIR MON KNITLY</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS ============ -->
+<section class="sec sec-cream" id="products" data-screen-label="Products">
+  <div class="container">
+    <div class="prod-head">
+      <div>
+        <p class="eyebrow">COLLECTION 2026</p>
+        <h2 class="display">La collection.</h2>
+      </div>
+      <div class="prod-filters">
+        <button class="fb on" data-f="all" onclick="filterP('all')">TOUS</button>
+        <button class="fb" data-f="court" onclick="filterP('court')">COURT — 40 CM</button>
+        <button class="fb" data-f="grand" onclick="filterP('grand')">GRAND — 80 CM</button>
+      </div>
+    </div>
+    <div class="pg" id="pg"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section class="sec sec-paper2" data-screen-label="Features">
+  <div class="container">
+    <div class="feat-head">
+      <p class="eyebrow">POURQUOI KNITLY</p>
+      <h2 class="display">Le détail<br>qui <em>change tout.</em></h2>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feat-num mono">01 / 03</div>
+        <h3 class="display">Universel<br>&amp; intelligent</h3>
+        <p>Compatible avec tous les smartphones du marché — du format standard aux versions Pro Max — avec ou sans coque fine. La maille extensible double couche épouse parfaitement chaque téléphone pour offrir une protection douce au quotidien. La matière nettoie naturellement les traces sur l'écran à chaque utilisation.</p>
+        <div class="feat-mark">↯</div>
+      </div>
+      <div class="feature">
+        <div class="feat-num mono">02 / 03</div>
+        <h3 class="display">Mode<br>avant tout</h3>
+        <p>Plus qu'une protection, Knitly est une vraie pièce de style. Sa maille 3D tridimensionnelle, inspirée d'un savoir-faire japonais, lui confère une identité visuelle unique. Porté en bandoulière, accroché à un sac ou tenu à la main, il apporte une touche originale et premium à n'importe quelle tenue.</p>
+        <div class="feat-mark">○</div>
+      </div>
+      <div class="feature">
+        <div class="feat-num mono">03 / 03</div>
+        <h3 class="display">Livraison<br>express</h3>
+        <p>Expédié depuis la France sous 48h ouvrées. Suivi inclus. Retours acceptés sous 14 jours. Paiement 100% sécurisé. Pour votre première commande, utilisez le code <strong>KNITLY5</strong> pour −5€.</p>
+        <div class="feat-mark">⬚</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FULL (DARK) ============ -->
+<section class="cta-full" data-screen-label="CTA">
+  <div class="cta-bg"><img src="assets/hero-knot.jpg" alt=""></div>
+  <div class="container cta-inner">
+    <p class="eyebrow">8 COLORIS · 2 FORMATS · STOCK LIMITÉ</p>
+    <h2 class="display">Votre<br>Knitly<br><em>vous attend.</em></h2>
+    <div class="cta-acts">
+      <button class="btn btn-primary" onclick="scrollTo2('products')">VOIR LA COLLECTION</button>
+      <button class="btn btn-ghost" onclick="openCart()">MON PANIER</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLORIS ============ -->
+<section class="sec sec-cream" id="coloris" data-screen-label="Coloris">
+  <div class="container">
+    <div class="col-head">
+      <p class="eyebrow">COLORIS DISPONIBLES</p>
+      <h2 class="display">Huit teintes.<br><em>Une seule envie.</em></h2>
+      <p class="body" style="max-width:480px;">Chaque coloris est une affirmation. Tricoté dans le même fil de coton, résiste au lavage et à la lumière. Trouve le tien — ou prends-en deux.</p>
+    </div>
+    <div class="swatches" id="swatches"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ============ AVIS ============ -->
+<section class="sec sec-paper2" id="avis" data-screen-label="Avis">
+  <div class="container">
+    <div class="avis-head">
+      <p class="eyebrow">AVIS CLIENTS · 4.9 / 5 — 1 248 AVIS</p>
+      <h2 class="display">Ils ne s'en<br><em>passent plus.</em></h2>
+    </div>
+    <div class="avis-grid">
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« J'avais peur que ça soit gadget — en fait je le porte tous les jours depuis trois mois. Ma poche est libre, mon dos aussi. »</p>
+        <div class="who"><span class="name">LÉA M.</span><span class="where">PARIS · GLACIAL</span></div>
+      </div>
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« La maille est dingue. On dirait un pull pour iPhone, en mieux. Couleur Ember parfaite, super solide après plusieurs lavages. »</p>
+        <div class="who"><span class="name">THOMAS R.</span><span class="where">LYON · EMBER</span></div>
+      </div>
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« Le compliment garanti à chaque sortie. J'en ai pris un deuxième en Cognac, ça matche tout. »</p>
+        <div class="who"><span class="name">INÈS K.</span><span class="where">MARSEILLE · COGNAC</span></div>
+      </div>
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« Cadeau parfait. J'en ai offert trois autour de moi, tout le monde l'a adopté. La livraison était au top. »</p>
+        <div class="who"><span class="name">MAXIME D.</span><span class="where">BORDEAUX · KLEIN</span></div>
+      </div>
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« Sportswear chic. Je ne pensais pas qu'un accessoire de téléphone puisse autant changer une silhouette. Bravo. »</p>
+        <div class="who"><span class="name">SARAH L.</span><span class="where">LILLE · NEON ROSE</span></div>
+      </div>
+      <div class="avis-card">
+        <div class="stars">★★★★★</div>
+        <p>« Livraison rapide, packaging premium, le produit tient toutes ses promesses. Le format Grand est top en bandoulière. »</p>
+        <div class="who"><span class="name">JULIEN P.</span><span class="where">NANTES · SHADOW</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ À PROPOS ============ -->
+<section class="sec sec-cream" id="apropos" data-screen-label="A propos">
+  <div class="container">
+    <div class="apropos">
+      <div class="apropos-img">
+        <img src="assets/purple-draped.jpg" alt="Knitly Aura drapé">
+      </div>
+      <div class="apropos-copy">
+        <p class="eyebrow">À PROPOS</p>
+        <h2 class="display">Faire d'un téléphone<br>un <em>objet de mode.</em></h2>
+        <p class="body">Knitly est née d'un constat simple : on passe la journée avec son téléphone à la main, et personne ne pense à le porter avec style. On a voulu un accessoire textile, pas un gadget. Une seule pièce, tricotée avec un savoir-faire japonais, qui s'use bien et se garde longtemps.</p>
+        <p class="body">Pas de surplus. Pas de plastique. Pas de version « pro ». Une sangle, huit couleurs, deux longueurs.</p>
+        <div class="signature">— L'équipe Knitly<span class="role mono">FONDATEURS · PARIS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" data-screen-label="Footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="brand">KNIT<span class="ly">LY</span></div>
+        <p class="tag">L'accessoire qui transforme votre téléphone en pièce de style. Livraison France, paiement sécurisé, qualité premium.</p>
+        <form class="footer-nl" onsubmit="event.preventDefault();this.querySelector('button').textContent='✓ MERCI';">
+          <input type="email" placeholder="TON EMAIL" required>
+          <button type="submit">S'INSCRIRE</button>
+        </form>
+      </div>
+      <div>
+        <h4>BOUTIQUE</h4>
+        <ul>
+          <li><a href="#products">Collection</a></li>
+          <li><a href="#produit">Le produit</a></li>
+          <li><a href="#coloris">Coloris</a></li>
+          <li><a href="#avis">Avis clients</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>INFORMATIONS</h4>
+        <ul>
+          <li><a href="#">Livraison &amp; retours</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#apropos">À propos</a></li>
+          <li><a href="account.html">Mon compte</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 KNITLY · PARIS 🇫🇷</span>
+      <span>NEWSLETTER · −5€ DÈS L'INSCRIPTION</span>
+      <span>CGV · MENTIONS · CONFIDENTIALITÉ</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="cart-overlay" id="cart-ov" onclick="closeCart()"></div>
+<aside class="cart-drawer" id="cart-drawer" aria-hidden="true">
+  <header class="cart-header">
+    <div>
+      <span class="cart-title display">MON PANIER</span>
+      <span class="cart-title-count mono" id="cart-title-count">(0 ARTICLE)</span>
+    </div>
+    <button class="cart-x" onclick="closeCart()">✕</button>
+  </header>
+  <div class="cart-body" id="cart-body">
+    <div class="cart-empty" id="cart-empty">
+      <div class="cart-empty-icon">🛍</div>
+      <p class="cart-empty-text">Votre panier est vide.<br>Découvrez la collection.</p>
+      <button class="btn btn-dark" onclick="closeCart();scrollTo2('products')">VOIR LA COLLECTION</button>
+    </div>
+    <div id="cart-items"></div>
+  </div>
+  <footer class="cart-footer" id="cart-footer" hidden>
+    <div class="promo-banner">
+      <p class="mono" style="color:var(--orange);font-size:11px;">🎁 OFFRE NOUVEAUX CLIENTS</p>
+      <p style="font-family:'Fraunces';font-style:italic;font-size:15px;margin:6px 0 10px 0;">Inscris-toi à la newsletter et reçois <strong>−5€</strong> sur ta première commande.</p>
+      <button class="promo-banner-cta mono" onclick="dismissOffer()">S'INSCRIRE →</button>
+    </div>
+    <div class="cart-promo">
+      <input type="text" id="cart-promo-input" placeholder="Code promo">
+      <button class="btn btn-dark" onclick="applyPromo()">APPLIQUER</button>
+    </div>
+    <div class="promo-error mono" id="promo-error" hidden></div>
+    <div class="promo-applied" id="promo-applied" hidden></div>
+    <div class="cart-totals">
+      <div class="cart-row"><span class="mono">SOUS-TOTAL</span><span id="cart-subtotal">0,00 €</span></div>
+      <div class="cart-row" id="cart-disc-row" hidden><span class="mono" style="color:var(--orange);">REMISE</span><span id="cart-disc" style="color:var(--orange);">−5,00 €</span></div>
+      <div class="cart-row"><span class="mono">LIVRAISON</span><span>4,99 €</span></div>
+      <div class="cart-row total"><span class="display">TOTAL</span><span id="cart-total">0,00 €</span></div>
+    </div>
+    <button class="btn btn-primary btn-checkout" id="btn-checkout" onclick="checkout()">PASSER LA COMMANDE →</button>
+    <div class="cart-trust">
+      <div class="ct-item"><span class="ct-ic">⏱</span><span>Livraison<br>France 48 h</span></div>
+      <div class="ct-item"><span class="ct-ic">🔒</span><span>Paiement<br>sécurisé</span></div>
+      <div class="ct-item"><span class="ct-ic">↺</span><span>Retours<br>14 jours</span></div>
+    </div>
+  </footer>
+</aside>
+
+<!-- ============ PRODUCT MODAL ============ -->
+<div class="pm-overlay" id="pm-ov" hidden>
+  <div class="pm-box" role="dialog" aria-modal="true">
+    <button class="pm-close" onclick="closeProduct()" aria-label="Fermer">✕</button>
+    <div class="pm-grid">
+      <div class="pm-media">
+        <div class="pm-gallery" id="pm-gallery"></div>
+        <div class="pm-thumbs" id="pm-thumbs"></div>
+      </div>
+      <div class="pm-info">
+        <p class="eyebrow">KNITLY · MAILLE 3D</p>
+        <h2 class="display" id="pm-name">—</h2>
+        <div class="pm-meta">
+          <span class="mono" id="pm-format">—</span>
+          <span class="pm-swatch" id="pm-swatch"></span>
+        </div>
+        <div class="pm-price display" id="pm-price">—</div>
+        <p class="pm-desc">Maille 3D tridimensionnelle, double couche, sans couture. Compatible tous smartphones (avec ou sans coque fine). Tricoté avec un savoir-faire japonais.</p>
+        <ul class="pm-bullets mono">
+          <li>· Coton recyclé, tricoté en France</li>
+          <li>· Lavable en machine 30°</li>
+          <li>· Livraison France 48h</li>
+          <li>· Retours sous 14 jours</li>
+        </ul>
+        <button class="btn btn-primary pm-add" id="pm-add">AJOUTER AU PANIER</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="site.js"></script>
+</body>
+</html>

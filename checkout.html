@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>KNITLY — Paiement sécurisé</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300..700;1,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Checkout-specific */
+  body{background:var(--paper);}
+  .co-top{background:var(--ink);color:#fff;padding:18px 0;border-bottom:1px solid var(--rule-dark);}
+  .co-top-inner{display:flex;align-items:center;justify-content:space-between;}
+  .co-logo{font-family:'Anton';font-size:30px;letter-spacing:.05em;color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px;}
+  .co-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);}
+  .co-logo .ly{color:var(--orange);}
+  .co-step{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.22em;color:#bcbcbe;}
+  .co-step b{color:var(--orange);}
+  .co-secure{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:.18em;color:var(--orange);text-transform:uppercase;}
+
+  .co-wrap{padding:48px 0 80px;}
+  .co-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start;}
+  .co-section{background:#fff;padding:32px;border:1px solid var(--rule-light);margin-bottom:18px;}
+  .co-section h2{font-family:'Anton';font-size:32px;letter-spacing:.02em;margin:0 0 6px 0;text-transform:uppercase;}
+  .co-section .num{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.32em;color:var(--orange);font-weight:700;}
+  .co-section .sub{font-size:14px;color:var(--muted-light);margin:0 0 22px 0;}
+  .co-row{display:grid;gap:14px;}
+  .co-row.cols-2{grid-template-columns:1fr 1fr;}
+  .co-row.cols-3{grid-template-columns:2fr 1fr 1fr;}
+  .co-field label{display:block;font-family:'JetBrains Mono';font-size:10px;letter-spacing:.22em;color:var(--muted-light);margin-bottom:6px;text-transform:uppercase;}
+  .co-field input, .co-field select{width:100%;background:#faf6ec;border:1px solid var(--rule-light);padding:14px;font-family:'Barlow';font-size:15px;outline:none;transition:border-color .15s,background .15s;}
+  .co-field input:focus, .co-field select:focus{border-color:var(--orange);background:#fff;}
+  .co-field input.err, .co-field select.err{border-color:#ff6b6b;}
+  .co-field .ferr{color:#ff6b6b;font-size:11px;margin-top:6px;font-family:'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;display:none;}
+  .co-field input.err + .ferr, .co-field select.err + .ferr{display:block;}
+
+  /* Payment methods */
+  .pay-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px;}
+  .pay-tab{padding:14px;background:#faf6ec;border:1px solid var(--rule-light);font-family:'JetBrains Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;}
+  .pay-tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .pay-tab svg{width:18px;height:18px;}
+
+  .pay-pane{display:none;}
+  .pay-pane.on{display:block;}
+
+  /* Order summary */
+  .co-summary{position:sticky;top:18px;background:#fff;padding:28px;border:1px solid var(--rule-light);}
+  .co-summary h3{font-family:'Anton';font-size:24px;letter-spacing:.04em;margin:0 0 4px 0;text-transform:uppercase;}
+  .co-summary .sub{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.22em;color:var(--muted-light);margin-bottom:18px;}
+  .co-items{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--rule-light);}
+  .co-item{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;}
+  .co-item .img{aspect-ratio:1;overflow:hidden;background:#f6f1e3;position:relative;}
+  .co-item .img img{width:100%;height:100%;object-fit:cover;}
+  .co-item .qty{position:absolute;top:-6px;right:-6px;background:var(--orange);color:var(--ink);font-family:'JetBrains Mono';font-size:10px;font-weight:700;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+  .co-item .name{font-family:'Anton';font-size:16px;letter-spacing:.04em;}
+  .co-item .meta{font-family:'JetBrains Mono';font-size:9px;letter-spacing:.22em;color:var(--muted-light);margin-top:2px;}
+  .co-item .price{font-family:'Anton';font-size:16px;color:var(--ink);}
+  .co-totals{display:flex;flex-direction:column;gap:8px;}
+  .co-trow{display:flex;justify-content:space-between;font-size:13px;color:var(--muted-light);font-family:'Barlow';}
+  .co-trow.disc{color:var(--orange);}
+  .co-trow.total{border-top:1px solid var(--rule-light);padding-top:14px;margin-top:6px;font-size:20px;color:var(--ink);font-family:'Anton';letter-spacing:.02em;text-transform:uppercase;}
+  .co-trow.total span:last-child{color:var(--orange);}
+
+  .co-promo{display:flex;gap:6px;margin-bottom:16px;}
+  .co-promo input{flex:1;background:#faf6ec;border:1px solid var(--rule-light);padding:10px 12px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;outline:none;}
+  .co-promo input.shake{animation:shake .3s;border-color:#ff6b6b;}
+  .co-promo button{background:var(--ink);color:var(--paper);border:0;padding:0 14px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:.22em;font-weight:700;cursor:pointer;text-transform:uppercase;}
+  .co-promo-msg{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.18em;color:var(--orange);margin-bottom:14px;display:none;}
+  .co-promo-msg.err{color:#ff6b6b;}
+  .co-promo-msg.show{display:block;}
+
+  .co-pay-btn{width:100%;background:var(--orange);color:var(--ink);border:0;padding:18px;font-family:'JetBrains Mono';font-size:12px;letter-spacing:.22em;font-weight:700;cursor:pointer;text-transform:uppercase;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;}
+  .co-pay-btn:hover{background:#ff7a47;}
+  .co-pay-btn:disabled{opacity:.6;cursor:wait;}
+
+  .co-trust{display:flex;justify-content:space-around;gap:12px;margin-top:18px;padding-top:18px;border-top:1px solid var(--rule-light);}
+  .co-trust-item{font-family:'JetBrains Mono';font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-light);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;}
+  .co-trust-item span{font-size:18px;}
+
+  /* Empty state */
+  .co-empty{text-align:center;padding:80px 20px;}
+  .co-empty h2{font-family:'Anton';font-size:48px;}
+
+  /* Success modal */
+  .co-success{position:fixed;inset:0;background:rgba(10,10,11,.95);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);padding:20px;}
+  .co-success[hidden]{display:none;}
+  .co-success-box{background:var(--paper);padding:60px 40px;max-width:480px;text-align:center;width:100%;}
+  .co-success-icon{width:80px;height:80px;border-radius:50%;background:var(--orange);color:var(--ink);font-size:36px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-family:'Anton';}
+  .co-success-box h2{font-family:'Anton';font-size:42px;letter-spacing:.02em;margin:0 0 12px 0;text-transform:uppercase;}
+  .co-success-box p{font-size:15px;color:var(--muted-light);line-height:1.6;}
+  .co-success-box .order-num{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.22em;background:var(--ink);color:var(--paper);padding:8px 16px;display:inline-block;margin:14px 0;}
+
+  @media (max-width:860px){
+    .co-grid{grid-template-columns:1fr;}
+    .co-row.cols-2,.co-row.cols-3{grid-template-columns:1fr;}
+    .co-summary{position:static;}
+  }
+</style>
+<script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+<header class="co-top">
+  <div class="container co-top-inner">
+    <a class="co-logo" href="Knitly Site.html"><span class="dot"></span>KNIT<span class="ly">LY</span></a>
+    <div class="co-step">PANIER · <b>PAIEMENT</b> · CONFIRMATION</div>
+    <div class="co-secure">🔒 PAIEMENT SÉCURISÉ SSL</div>
+  </div>
+</header>
+
+<main class="co-wrap">
+  <div class="container">
+    <div id="co-content"></div>
+  </div>
+</main>
+
+<div class="co-success" id="co-success" hidden>
+  <div class="co-success-box">
+    <div class="co-success-icon">✓</div>
+    <h2>Commande confirmée</h2>
+    <p>Merci pour ta commande. Tu recevras un email de confirmation d'ici quelques minutes avec le suivi de livraison.</p>
+    <div class="order-num" id="order-num">KNT-000000</div>
+    <p style="font-size:13px;">Livraison estimée sous 48h ouvrées en France.</p>
+    <button class="co-pay-btn" style="max-width:280px;margin:24px auto 0;" onclick="location.href='Knitly Site.html'">RETOUR À LA BOUTIQUE</button>
+  </div>
+</div>
+
+<script src="site.js"></script>
+<script>
+// Checkout-specific rendering
+function renderCheckout(){
+  const root = document.getElementById('co-content');
+  if (state.cart.length === 0) {
+    root.innerHTML = `
+      <div class="co-empty">
+        <h2 class="display">Ton panier est vide.</h2>
+        <p style="color:var(--muted-light);margin-bottom:32px;">Ajoute au moins un article pour passer commande.</p>
+        <a href="Knitly Site.html" class="btn btn-primary">VOIR LA COLLECTION</a>
+      </div>
+    `;
+    return;
+  }
+
+  root.innerHTML = `
+    <div class="co-grid">
+      <div>
+        <!-- CONTACT -->
+        <div class="co-section">
+          <div class="num">01 / 03 — CONTACT</div>
+          <h2>Contact</h2>
+          <p class="sub">On t'envoie le récap et le suivi à cette adresse.</p>
+          <div class="co-row cols-2">
+            <div class="co-field">
+              <label>Email</label>
+              <input type="email" id="f-email" placeholder="ton@email.com" required>
+              <div class="ferr">Email invalide</div>
+            </div>
+            <div class="co-field">
+              <label>Téléphone</label>
+              <input type="tel" id="f-phone" placeholder="06 12 34 56 78" required>
+              <div class="ferr">Téléphone requis</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHIPPING -->
+        <div class="co-section">
+          <div class="num">02 / 03 — LIVRAISON</div>
+          <h2>Adresse de livraison</h2>
+          <p class="sub">Livraison France 48h ouvrées · 4,99 €</p>
+          <div class="co-row cols-2">
+            <div class="co-field">
+              <label>Prénom</label>
+              <input type="text" id="f-firstname" required>
+              <div class="ferr">Prénom requis</div>
+            </div>
+            <div class="co-field">
+              <label>Nom</label>
+              <input type="text" id="f-lastname" required>
+              <div class="ferr">Nom requis</div>
+            </div>
+          </div>
+          <div class="co-row" style="margin-top:14px;">
+            <div class="co-field">
+              <label>Adresse</label>
+              <input type="text" id="f-addr" placeholder="Numéro et rue" required>
+              <div class="ferr">Adresse requise</div>
+            </div>
+          </div>
+          <div class="co-row cols-3" style="margin-top:14px;">
+            <div class="co-field">
+              <label>Ville</label>
+              <input type="text" id="f-city" required>
+              <div class="ferr">Ville requise</div>
+            </div>
+            <div class="co-field">
+              <label>Code postal</label>
+              <input type="text" id="f-zip" maxlength="5" required>
+              <div class="ferr">CP invalide</div>
+            </div>
+            <div class="co-field">
+              <label>Pays</label>
+              <select id="f-country">
+                <option value="FR">France</option>
+                <option value="BE">Belgique</option>
+                <option value="CH">Suisse</option>
+                <option value="LU">Luxembourg</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="co-section">
+          <div class="num">03 / 03 — PAIEMENT</div>
+          <h2>Paiement</h2>
+          <p class="sub">Toutes les transactions sont chiffrées et sécurisées.</p>
+          <div class="pay-tabs">
+            <div class="pay-tab on" data-pay="card" onclick="switchPay('card')">💳 CARTE</div>
+            <div class="pay-tab" data-pay="paypal" onclick="switchPay('paypal')">🅿️ PAYPAL</div>
+            <div class="pay-tab" data-pay="apple" onclick="switchPay('apple')">  APPLE PAY</div>
+          </div>
+          <div class="pay-pane on" id="pay-card">
+            <div class="co-row" style="margin-top:14px;">
+              <div class="co-field">
+                <label>Numéro de carte</label>
+                <input type="text" id="f-card" placeholder="4242 4242 4242 4242" maxlength="19" required>
+                <div class="ferr">Numéro invalide</div>
+              </div>
+            </div>
+            <div class="co-row cols-3" style="margin-top:14px;">
+              <div class="co-field">
+                <label>Nom sur la carte</label>
+                <input type="text" id="f-cname" required>
+                <div class="ferr">Nom requis</div>
+              </div>
+              <div class="co-field">
+                <label>Expiration (MM/AA)</label>
+                <input type="text" id="f-exp" placeholder="12/27" maxlength="5" required>
+                <div class="ferr">Date invalide</div>
+              </div>
+              <div class="co-field">
+                <label>CVV</label>
+                <input type="text" id="f-cvv" placeholder="123" maxlength="3" required>
+                <div class="ferr">CVV invalide</div>
+              </div>
+            </div>
+          </div>
+          <div class="pay-pane" id="pay-paypal">
+            <p style="font-size:14px;color:var(--muted-light);padding:20px;background:#faf6ec;border:1px solid var(--rule-light);">Vous serez redirigé vers PayPal après avoir cliqué sur "Payer".</p>
+          </div>
+          <div class="pay-pane" id="pay-apple">
+            <p style="font-size:14px;color:var(--muted-light);padding:20px;background:#faf6ec;border:1px solid var(--rule-light);">Confirmez votre achat avec Touch ID ou Face ID après avoir cliqué sur "Payer".</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <aside>
+        <div class="co-summary">
+          <h3>Récapitulatif</h3>
+          <p class="sub" id="co-count"></p>
+          <div class="co-items" id="co-items"></div>
+          <div class="co-promo">
+            <input type="text" id="co-promo-input" placeholder="Code promo">
+            <button onclick="coApplyPromo()">APPLIQUER</button>
+          </div>
+          <div class="co-promo-msg" id="co-promo-msg"></div>
+          <div class="co-totals" id="co-totals"></div>
+          <button class="co-pay-btn" id="co-pay-btn" onclick="payNow()">PAYER MAINTENANT</button>
+          <div class="co-trust">
+            <div class="co-trust-item"><span>🔒</span>SSL<br>SÉCURISÉ</div>
+            <div class="co-trust-item"><span>↺</span>14 JOURS<br>RETOUR</div>
+            <div class="co-trust-item"><span>⚡</span>48 H<br>FRANCE</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  `;
+
+  renderCoItems();
+  setupCardInputs();
+}
+
+function renderCoItems(){
+  const itemsRoot = document.getElementById('co-items');
+  const totalsRoot = document.getElementById('co-totals');
+  const count = state.cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('co-count').textContent = `${count} ARTICLE${count > 1 ? 'S' : ''}`;
+
+  itemsRoot.innerHTML = state.cart.map(item => {
+    const p = PRODUCTS.find(x => x.id === item.id);
+    if (!p) return '';
+    return `
+      <div class="co-item">
+        <div class="img">
+          <img src="${photoUrl(p.photos[0])}" alt="${p.label}">
+          <span class="qty">${item.qty}</span>
+        </div>
+        <div>
+          <div class="name">${p.colorName.toUpperCase()}</div>
+          <div class="meta">${p.size} · ${p.format === 'court' ? 'COURT' : 'GRAND'}</div>
+        </div>
+        <div class="price">${fmtEUR(p.price * item.qty)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const subtotal = state.cart.reduce((s, i) => {
+    const p = PRODUCTS.find(x => x.id === i.id);
+    return s + (p ? p.price * i.qty : 0);
+  }, 0);
+  const discount = (state.promo && PROMO_CODES[state.promo]) ? PROMO_CODES[state.promo] : 0;
+  const shipping = subtotal > 0 ? 4.99 : 0;
+  const total = Math.max(0, subtotal - discount + shipping);
+  totalsRoot.innerHTML = `
+    <div class="co-trow"><span>Sous-total</span><span>${fmtEUR(subtotal)}</span></div>
+    ${discount ? `<div class="co-trow disc"><span>Remise ${state.promo}</span><span>−${fmtEUR(discount)}</span></div>` : ''}
+    <div class="co-trow"><span>Livraison France</span><span>${fmtEUR(shipping)}</span></div>
+    <div class="co-trow total"><span>Total</span><span>${fmtEUR(total)}</span></div>
+  `;
+}
+
+function coApplyPromo(){
+  const input = document.getElementById('co-promo-input');
+  const msg = document.getElementById('co-promo-msg');
+  const code = input.value.trim().toUpperCase();
+  if (PROMO_CODES[code]) {
+    state.promo = code;
+    localStorage.setItem('knitly-promo', code);
+    input.value = '';
+    msg.textContent = `✓ Code ${code} appliqué — −${fmtEUR(PROMO_CODES[code])}`;
+    msg.classList.remove('err');
+    msg.classList.add('show');
+    renderCoItems();
+  } else if (code === '') {
+    msg.textContent = 'Veuillez saisir un code';
+    msg.classList.add('err','show');
+    input.classList.add('shake');
+    setTimeout(() => input.classList.remove('shake'), 400);
+  } else {
+    msg.textContent = 'Code invalide';
+    msg.classList.add('err','show');
+    input.classList.add('shake');
+    setTimeout(() => input.classList.remove('shake'), 400);
+  }
+}
+window.coApplyPromo = coApplyPromo;
+
+function switchPay(t){
+  document.querySelectorAll('.pay-tab').forEach(b => b.classList.toggle('on', b.dataset.pay === t));
+  document.querySelectorAll('.pay-pane').forEach(p => p.classList.toggle('on', p.id === 'pay-' + t));
+}
+window.switchPay = switchPay;
+
+// Format card number 4-4-4-4
+function setupCardInputs(){
+  const card = document.getElementById('f-card');
+  if (card) card.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g,'').slice(0,16);
+    e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+  });
+  const exp = document.getElementById('f-exp');
+  if (exp) exp.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g,'').slice(0,4);
+    e.target.value = v.length > 2 ? v.slice(0,2) + '/' + v.slice(2) : v;
+  });
+  const cvv = document.getElementById('f-cvv');
+  if (cvv) cvv.addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,3));
+  const zip = document.getElementById('f-zip');
+  if (zip) zip.addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,5));
+}
+
+function validateAll(){
+  const requiredText = ['f-email','f-phone','f-firstname','f-lastname','f-addr','f-city','f-zip'];
+  let ok = true;
+  requiredText.forEach(id => {
+    const el = document.getElementById(id);
+    const valid = el.value.trim().length > 0 && (id !== 'f-email' || /\S+@\S+\.\S+/.test(el.value)) && (id !== 'f-zip' || el.value.length === 5);
+    el.classList.toggle('err', !valid);
+    if (!valid) ok = false;
+  });
+  // Card pane only
+  if (document.querySelector('.pay-tab.on').dataset.pay === 'card') {
+    const cardChecks = [
+      ['f-card', v => v.replace(/\s/g,'').length === 16],
+      ['f-cname', v => v.trim().length > 1],
+      ['f-exp', v => /^\d{2}\/\d{2}$/.test(v)],
+      ['f-cvv', v => v.length === 3],
+    ];
+    cardChecks.forEach(([id, fn]) => {
+      const el = document.getElementById(id);
+      const valid = fn(el.value);
+      el.classList.toggle('err', !valid);
+      if (!valid) ok = false;
+    });
+  }
+  return ok;
+}
+
+// ============================================================
+// CONFIGURATION — remplace ces 2 valeurs avant de déployer
+// ============================================================
+const FORMSPREE_FORM_ID = 'mdajoznr';
+// Crée tes liens sur dashboard.stripe.com > Payment Links
+const STRIPE_PAYMENT_LINKS = {
+  court:   'https://buy.stripe.com/bJefZi4oegpD5gb8REf7i01',
+  grand:   'https://buy.stripe.com/bJe14oaMC6P3383gk6f7i00',
+  mixte:   'https://buy.stripe.com/bJefZi4oegpD5gb8REf7i01',
+};
+// ============================================================
+
+async function payNow(){
+  // 1. Validation du formulaire (inchangée)
+  if (!validateAll()) {
+    const first = document.querySelector('.err');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // 2. Bouton en chargement
+  const btn = document.getElementById('co-pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> TRAITEMENT…';
+
+  // 3. Récupérer les infos client
+  const prenom   = document.getElementById('f-firstname')?.value || '';
+  const nom      = document.getElementById('f-lastname')?.value || '';
+  const email    = document.getElementById('f-email')?.value || '';
+  const tel      = document.getElementById('f-phone')?.value || '';
+  const adresse  = document.getElementById('f-addr')?.value || '';
+  const ville    = document.getElementById('f-city')?.value || '';
+  const cp       = document.getElementById('f-zip')?.value || '';
+
+  // 4. Résumé de la commande
+  const lignes = (state.cart || []).map(item => {
+    const p = PRODUCTS.find(x => x.id === item.id);
+    return p ? p.colorName + ' ' + (item.id.includes('grand') ? 'Grand' : 'Court') + ' x' + item.qty : '';
+  }).filter(Boolean).join(' | ');
+
+  const sousTotal = (state.cart || []).reduce((s, item) => {
+    const p = PRODUCTS.find(x => x.id === item.id);
+    return s + (p ? p.price * item.qty : 0);
+  }, 0);
+
+  const remise = state.discount || 0;
+  const livraison = 4.99;
+  const total = Math.max(0, sousTotal - remise + livraison).toFixed(2);
+
+  // 5. Envoyer la commande par email via Formspree
+  try {
+    await fetch('https://formspree.io/f/' + FORMSPREE_FORM_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'Nouvelle commande Knitly — ' + total + ' €',
+        prenom, nom, email, tel,
+        adresse: adresse + ', ' + cp + ' ' + ville,
+        commande: lignes,
+        code_promo: state.promo || 'aucun',
+        total: total + ' €',
+      })
+    });
+  } catch(e) {
+    console.warn('Formspree:', e);
+  }
+
+  // 6. Choisir le bon lien Stripe selon les formats commandés
+  const hasGrand = (state.cart || []).some(i => i.id.includes('grand'));
+  const hasCourt = (state.cart || []).some(i => i.id.includes('court'));
+  let stripeUrl = STRIPE_PAYMENT_LINKS.mixte;
+  if (hasGrand && !hasCourt) stripeUrl = STRIPE_PAYMENT_LINKS.grand;
+  if (hasCourt && !hasGrand) stripeUrl = STRIPE_PAYMENT_LINKS.court;
+
+  // 7. Rediriger vers Stripe (paiement réel)
+  const params = new URLSearchParams({ prefilled_email: email });
+  localStorage.setItem('knitly-cart', '[]');
+  localStorage.removeItem('knitly-promo');
+  window.location.href = stripeUrl + '?' + params.toString();
+}
+window.payNow = payNow;
+
+renderCheckout();
+</script>
+</body>
+</html>
